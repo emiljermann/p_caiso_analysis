@@ -14,3 +14,8 @@ plan.md
 *.xml
 *.geojson
 *.gpkg
+*.cpg
+*.dbf
+*.prj
+*.shp
+*.shx
