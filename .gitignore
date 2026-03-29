@@ -3,3 +3,14 @@ venv/
 
 # Writing/Comments
 mistakes.txt
+plan.md
+
+# Tools
+.claude/
+
+# Data
+*.csv
+*.parquet
+*.xml
+*.geojson
+*.gpkg
