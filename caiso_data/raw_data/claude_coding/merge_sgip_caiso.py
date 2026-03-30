@@ -30,14 +30,14 @@ def merge_sgip_files() -> pd.DataFrame:
         df = pd.read_csv(filepath)
         df = df.rename(columns={
             "timestamp": "datetime",
-            "MOER version 2.0": "marginal_emissions_kgCO2kWh",
+            "MOER version 2.0": "mer_kgCO2kWh",
         })
         df["dlap"] = dlap
         frames.append(df)
 
     merged = pd.concat(frames, ignore_index=True)
     merged["datetime"] = pd.to_datetime(merged["datetime"], utc=True)
-    merged = merged[["dlap", "datetime", "marginal_emissions_kgCO2kWh"]]
+    merged = merged[["dlap", "datetime", "mer_kgCO2kWh"]]
     merged = merged.sort_values(["dlap", "datetime"]).reset_index(drop=True)
     return merged
 
