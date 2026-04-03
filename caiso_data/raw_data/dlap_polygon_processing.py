@@ -13,5 +13,10 @@ gdf_sub = gdf.loc[:,sub_cols]
 gdf_sub["dlap"] = gdf_sub["Utility"].map(utility_mapping)
 gdf_sub.dropna(inplace=True, ignore_index=True)
 gdf_sub = gdf_sub[["dlap", "geometry"]]
+gdf_sub["state"] = "CA"
+gdf_sub["iso"] = "CAISO"
+gdf_sub = gdf_sub[["state", "iso", "dlap", "geometry"]]
 
-gdf_sub.to_file("dlap_polygons.gpkg")
+print(gdf_sub.head())
+
+gdf_sub.to_file("dlaps.geojson")

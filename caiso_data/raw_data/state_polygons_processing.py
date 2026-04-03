@@ -7,8 +7,9 @@ gdf = gpd.read_file(url)
 gdf = gdf.where(gdf["NAME"] == "California").dropna()
 
 sub_cols = ["NAME", "geometry"]
-gdf = gdf[sub_cols].rename(columns={"NAME": "state"})
+gdf = gdf[sub_cols].rename(columns={"NAME": "state"}).reset_index(drop=True)
+gdf.at[0, "state"] = "CA"
 
 print(gdf.head())
 
-gdf.to_file("california_polygon.gpkg")
+gdf.to_file("california.geojson")

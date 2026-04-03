@@ -5,6 +5,9 @@ venv/
 mistakes.txt
 plan.md
 
+# Credentials
+credentials.json
+
 # Tools
 .claude/
 

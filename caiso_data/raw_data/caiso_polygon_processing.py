@@ -15,8 +15,10 @@ gdf = gdf[sub_cols].rename(columns={"NAME":"name"})
 print(gdf.columns)
 gdf = gdf.iloc[[0]].reset_index(drop=True)
 gdf['geometry'] = gdf['geometry'].apply(lambda x: x - iid_polygon)
-gdf.at[0,'name'] = "CAISO"
+gdf['state'] = "CA"
+gdf['iso'] = "CAISO"
+gdf = gdf[["state", "iso", "geometry"]]
 
 print(gdf.head())
 
-gdf.to_file("caiso_polygon.gpkg")
+gdf.to_file("caiso.geojson")

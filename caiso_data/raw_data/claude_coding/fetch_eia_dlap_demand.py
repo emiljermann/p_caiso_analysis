@@ -3,15 +3,19 @@ Fetch hourly demand by CAISO sub-balancing authority (PGE, SCE, SDGE) from the E
 
 API: EIA v2 electricity/rto/region-sub-ba-data
 Date range: 2025-01-01 to 2026-01-01 (GMT)
-Output: eia_subba_demand.csv and eia_subba_demand.parquet
+Output: eia_dlap_demand.csv and eia_dlap_demand.parquet
 """
 
+import json
 import os
 import time
 import requests
 import pandas as pd
 
-API_KEY = "553Ih28VcUOGRuzNM9Qd1QOY3Ntzxh6cznYHkbqz"
+CREDS_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "..", "credentials.json")
+with open(CREDS_PATH) as _f:
+    API_KEY = json.load(_f)["eia_api_key"]
+
 BASE_URL = "https://api.eia.gov/v2/electricity/rto/region-sub-ba-data/data/"
 OUTPUT_DIR = os.path.dirname(__file__)
 
@@ -63,10 +67,14 @@ def main():
     records = fetch_all_pages()
     df = pd.DataFrame(records)
 
-    df = df[["subba", "period", "value"]].rename(columns={"period":"datetime", "subba":"dlap", "value":"demand_MWh"})
-    df["datetime"] = pd.to_datetime(df["datetime"], utc=True)
+    df = df[["subba", "period", "value"]].rename(columns={"period":"datetime_utc", "subba":"dlap", "value":"demand_MWh"})
+    df["datetime_utc"] = pd.to_datetime(df["datetime_utc"], utc=True)
     df["dlap"] = df["dlap"].map(dlap_mapping)
-    df = df.sort_values(["dlap", "datetime"]).reset_index(drop=True)
+    df = df.sort_values(["dlap", "datetime_utc"]).reset_index(drop=True)
+    df["state"] = "CA"
+    df["iso"] = "CAISO"
+
+    df = df[["state", "iso", "dlap", "datetime_utc", "demand_MWh"]]
 
     print(f"\nFetched {len(df):,} total records")
     print(f"Columns: {list(df.columns)}")

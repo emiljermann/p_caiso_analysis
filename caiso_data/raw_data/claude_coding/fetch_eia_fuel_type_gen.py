@@ -6,12 +6,16 @@ Date range: 2025-01-01 to 2026-01-01 (GMT)
 Output: eia_fuel_type_gen.csv and eia_fuel_type_gen.parquet
 """
 
+import json
 import os
 import time
 import requests
 import pandas as pd
 
-API_KEY = "553Ih28VcUOGRuzNM9Qd1QOY3Ntzxh6cznYHkbqz"
+CREDS_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "..", "credentials.json")
+with open(CREDS_PATH) as _f:
+    API_KEY = json.load(_f)["eia_api_key"]
+
 BASE_URL = "https://api.eia.gov/v2/electricity/rto/fuel-type-data/data/"
 OUTPUT_DIR = os.path.dirname(__file__)
 
@@ -56,11 +60,15 @@ def fetch_all_pages() -> list[dict]:
 def main():
     records = fetch_all_pages()
     df = pd.DataFrame(records)
-    df = df[["period", "type-name", "value"]].rename(columns={"period" : "datetime", "type-name": "fuel_type", "value" : "generation_MWh"})
-    df["datetime"] = pd.to_datetime(df["datetime"], utc=True)
+    df = df[["period", "type-name", "value"]].rename(columns={"period" : "datetime_utc", "type-name": "fuel_type", "value" : "generation_MWh"})
+    df["datetime_utc"] = pd.to_datetime(df["datetime_utc"], utc=True)
     df["generation_MWh"] = pd.to_numeric(df["generation_MWh"])
     df["fuel_type"] = df["fuel_type"].str.lower()
-    df = df.sort_values(["datetime"]).reset_index(drop=True)
+    df = df.sort_values(["datetime_utc"]).reset_index(drop=True)
+    df["state"] = "CA"
+    df["iso"] = "CAISO"
+
+    df = df[["state", "iso", "datetime_utc", "fuel_type", "generation_MWh"]]
 
     print(f"\nFetched {len(df):,} total records")
     print(f"Columns: {list(df.columns)}")
