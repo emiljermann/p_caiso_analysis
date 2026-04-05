@@ -43,3 +43,8 @@ state := California
 iso := California Independent System Operator
 dlap := Default Load Aggregation Point {PGE, SCE, SDGE}
 geometry := Polygon or MultiPolygon of each DLAP
+
+
+## Notes
+- What is in "other" fuel type for eia_fueltype_gen. 
+  - Consider accounting for geothermal, battery, and import power?
