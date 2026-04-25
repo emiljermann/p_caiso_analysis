@@ -5,3 +5,6 @@
 - SGIP
 - OASIS
 - gridstatus.io
+
+# Extras
+- https://blog.gridstatus.io/caiso-solar-storage-spring-2025/

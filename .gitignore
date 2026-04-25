@@ -2,11 +2,12 @@
 venv/
 
 # Writing/Comments
-mistakes.txt
-plan.md
+notes.txt
 
 # Credentials
 credentials.json
+client_secret.json
+google_sa.json
 
 # Tools
 .claude/
