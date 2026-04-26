@@ -1,4 +1,5 @@
 # Virtual Environment
+.venv/
 venv/
 
 # Writing/Comments
@@ -11,6 +12,7 @@ google_sa.json
 
 # Tools
 .claude/
+.vscode/
 
 # Data
 *.csv
